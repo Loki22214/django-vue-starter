@@ -1,0 +1,42 @@
+repos:
+  # Python
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.1
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # JavaScript / Vue
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint
+        entry: npx --prefix frontend eslint --fix
+        language: system
+        files: ^frontend/
+        types_or: [javascript, jsx, ts, tsx, vue]
+        exclude: ^frontend/(dist|node_modules|.nuxt|.output)/
+        pass_filenames: true
+        fail_fast: true
+
+      - id: prettier
+        name: Prettier
+        entry: npx --prefix frontend prettier --write
+        language: system
+        files: ^frontend/
+        types_or:
+          - javascript
+          - jsx
+          - ts
+          - tsx
+          - vue
+          - css
+          - scss
+          - html
+          - json
+          - yaml
+          - markdown
+        exclude: ^frontend/(dist|node_modules|.nuxt|.output|package-lock\.json)/
+        pass_filenames: true
+        fail_fast: true
