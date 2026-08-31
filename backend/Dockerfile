@@ -3,7 +3,8 @@ FROM python:3.12-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
 
 WORKDIR /app
 
@@ -11,32 +12,43 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# development stage
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+
+# Development stage
 FROM base AS development
 
-RUN pip install --upgrade pip
+# Copy dependency files first for Docker layer caching
+COPY pyproject.toml uv.lock ./
 
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+# Install production + development dependencies
+RUN uv sync --locked
 
+# Copy application
 COPY . .
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:8000"]
+CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+
 
 # Production stage
 FROM base AS production
 
-RUN pip install --upgrade pip
+# Copy dependency files first for Docker layer caching
+COPY pyproject.toml uv.lock ./
 
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+# Install production dependencies only
+RUN uv sync --locked --no-dev
 
+# Copy application
 COPY . .
 
-RUN python manage.py collectstatic --noinput
+# Collect static files
+RUN uv run python manage.py collectstatic --noinput
 
+# Create non-root user
 RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --gid 1001 appuser && \
     chown -R appuser:appgroup /app
@@ -45,4 +57,4 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--threads", "2", "config.wsgi:application"]
+CMD [".venv/bin/gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--threads", "2", "config.wsgi:application"]

@@ -1,3 +1,27 @@
+[project]
+name = "django-vue-starter"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django==6.1",
+    "django-cors-headers==4.9.0",
+    "django-filter==26.1",
+    "djangorestframework==3.18.0",
+    "djangorestframework-simplejwt==5.5.1",
+    "drf-spectacular==0.30.0",
+    "gunicorn==26.1.0",
+    "psycopg2-binary==2.9.12",
+    "python-dotenv==1.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit==4.6.2",
+    "pytest==9.1.1",
+    "pytest-django==4.14.0",
+    "ruff==0.16.3",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
