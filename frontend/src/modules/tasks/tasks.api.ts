@@ -12,7 +12,7 @@ export const getTask = async (task_id: number): Promise<Task> => {
   return response.data
 }
 
-export const createTask = async (payload: Task): Promise<Task> => {
+export const createTask = async (payload: Partial<Task>): Promise<Task> => {
   const response = await client.post<Task>('/tasks/', payload)
   return response.data
 }

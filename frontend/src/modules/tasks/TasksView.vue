@@ -12,6 +12,7 @@ import TasksFilter from '@/modules/tasks/TaskFilterModal.vue'
 import {
   statusOptions,
   priorityOptions,
+  type Task,
 } from '@/modules/tasks/tasks.types'
 
 import { useTasks } from '@/modules/tasks/useTasks'
@@ -49,7 +50,7 @@ const {
 /**
  * Delete task confirmation
  */
-const confirmDelete = (task: { id: number; name: string }) => {
+const confirmDelete = (task: Task) => {
   confirm.require({
     message: `Are you sure you want to delete "${task.name}"?`,
     header: 'Delete Task',
@@ -68,7 +69,9 @@ const confirmDelete = (task: { id: number; name: string }) => {
     },
 
     accept: () => {
-      deleteTask(task.id)
+      if (task.id !== undefined) {
+        deleteTask(task.id)
+      }
     },
   })
 }

@@ -64,8 +64,8 @@ export const useTasks = () => {
 
       // If the deleted task was the last item on the current page,
       // move back one page so the user doesn't end up on an empty page.
-      if (tasks.value.length === 1 && filters.value.page > 1) {
-        filters.value.page -= 1
+      if (tasks.value.length === 1 && (filters.value.page ?? 1) > 1) {
+        filters.value.page = (filters.value.page ?? 1) - 1
       }
 
       await fetchTasks()

@@ -13,7 +13,7 @@ import type { Task } from './tasks.types'
 
 const props = defineProps<{
   visible: boolean
-  formData: Task
+  formData: Partial<Task>
   errors: Record<string, string>
   statusOptions: { label: string; value: string }[]
   priorityOptions: { label: string; value: string }[]
@@ -22,11 +22,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  addTask: [task: Task]
+  addTask: [task: Partial<Task>]
   'update:visible': [value: boolean]
 }>()
 
-const localFormData = ref<Task>({
+const localFormData = ref<Partial<Task>>({
   ...props.formData,
 })
 
@@ -153,7 +153,7 @@ const submit = () => {
           </Label>
 
           <DatePicker
-            v-model="localFormData.due_date"
+            :model-value="(localFormData.due_date as any)"
             dateFormat="yy-mm-dd"
             updateModelType="string"
             showIcon
@@ -161,6 +161,7 @@ const submit = () => {
             iconDisplay="input"
             inputId="due_date"
             :invalid="!!errors.due_date"
+            @update:model-value="localFormData.due_date = $event as string | null"
           />
 
           <Message

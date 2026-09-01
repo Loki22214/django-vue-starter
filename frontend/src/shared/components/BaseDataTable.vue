@@ -36,8 +36,8 @@ const emit = defineEmits<{
   'sort': [event: any]
 }>()
 
-const handleSearchChange = (value: string) => {
-  emit('update:searchValue', value)
+const handleSearchChange = (value: string | undefined) => {
+  emit('update:searchValue', value ?? '')
 }
 </script>
 

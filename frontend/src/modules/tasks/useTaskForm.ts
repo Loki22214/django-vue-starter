@@ -49,7 +49,7 @@ export const useTaskForm = (
 
   const openEdit = (task: Task) => {
     isEditing.value = true
-    editingTaskId.value = task.id
+    editingTaskId.value = task.id ?? null
 
     formData.value = {
       id: task.id,
@@ -64,7 +64,7 @@ export const useTaskForm = (
     visible.value = true
   }
 
-  const submit = async (task: Task) => {
+  const submit = async (task: Partial<Task>) => {
     loading.value = true
     errors.value = {}
 
