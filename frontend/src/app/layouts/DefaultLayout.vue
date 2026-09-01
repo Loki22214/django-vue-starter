@@ -34,7 +34,7 @@ import { useTheme } from '@/shared/composables/useTheme'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const { isDark, toggleTheme } = useTheme()
+const { initTheme, isDark, toggleTheme } = useTheme()
 
 const isMobile = ref(false)
 const sidebarOpen = ref(true)
@@ -61,6 +61,7 @@ const logout = async () => {
 }
 
 onMounted(() => {
+  initTheme()
   if (typeof window === 'undefined') {
     return
   }
