@@ -44,7 +44,7 @@ setup:
 # Install backend and frontend dependencies.
 install:
 	@echo "Installing dependencies..."
-	cd backend && pip install -r requirements.txt
+	cd backend && uv sync
 	cd frontend && npm install
 	@echo "Dependencies installed."
 
@@ -57,7 +57,7 @@ dev: db
 # Start the Django development server.
 backend:
 	@echo "Starting Django..."
-	cd backend && python manage.py runserver
+	cd backend && uv run python manage.py runserver
 
 
 # Start the Vue development server.
@@ -87,17 +87,17 @@ db-reset:
 
 # Apply pending Django database migrations.
 migrate:
-	cd backend && python manage.py migrate
+	cd backend && uv run python manage.py migrate
 
 
 # Create new Django migration files.
 makemigrations:
-	cd backend && python manage.py makemigrations
+	cd backend && uv run python manage.py makemigrations
 
 
 # Open the Django interactive shell.
 shell:
-	cd backend && python manage.py shell
+	cd backend && uv run python manage.py shell
 
 
 # Run all linters.
@@ -106,7 +106,7 @@ lint: lint-backend lint-frontend
 
 # Run Ruff on the Django backend.
 lint-backend:
-	cd backend && ruff check .
+	cd backend && uv run ruff check .
 
 
 # Run ESLint on the Vue frontend.
@@ -120,7 +120,7 @@ format: format-backend format-frontend
 
 # Format Python code with Ruff.
 format-backend:
-	cd backend && ruff format .
+	cd backend && uv run ruff format .
 
 
 # Format Vue/JavaScript code with Prettier.
@@ -134,7 +134,7 @@ test: test-backend
 
 # Run the Django/Python test suite with pytest.
 test-backend:
-	cd backend && pytest
+	cd backend && uv run pytest
 
 
 # -------------------------
