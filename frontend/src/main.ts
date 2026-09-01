@@ -9,6 +9,8 @@ import ConfirmationService from 'primevue/confirmationservice'
 
 import App from './app/App.vue'
 import router from './app/router/index.js'
+import { useAuthStore } from './modules/auth/auth.store'
+import { watch } from 'vue'
 
 const savedTheme = localStorage.getItem('theme')
 
@@ -28,11 +30,23 @@ app.use(PrimeVue, {
   },
 })
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(ConfirmationService)
 app.use(ToastService)
 app.use(router)
 
 router.isReady().then(() => {
+  // Watch for unauthorized access and redirect to login
+  const authStore = useAuthStore()
+  watch(
+    () => authStore.isAuthenticated,
+    (isAuthenticated) => {
+      if (!isAuthenticated && router.currentRoute.value.meta.requiresAuth) {
+        router.push({ name: 'login' })
+      }
+    },
+  )
+
   app.mount('#app')
 })

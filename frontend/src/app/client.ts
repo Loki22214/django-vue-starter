@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
+import { useAuthStore } from '@/modules/auth/auth.store'
 
 const client: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
@@ -78,6 +79,11 @@ client.interceptors.response.use(
       return client(originalRequest)
     } catch (refreshError) {
       processQueue(refreshError)
+
+      // Clear auth state and redirect to login
+      const authStore = useAuthStore()
+      authStore.isAuthenticated = false
+      authStore.user = null
 
       return Promise.reject(refreshError)
     } finally {

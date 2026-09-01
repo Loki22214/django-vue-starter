@@ -9,7 +9,6 @@ import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
 import Label from 'primevue/label'
 import Message from 'primevue/message'
-import { on } from 'events'
 
 const router = useRouter()
 const authStore = useAuthStore()
