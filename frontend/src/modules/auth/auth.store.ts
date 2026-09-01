@@ -137,13 +137,19 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const clearErrors = () => {
+    error.value = null
+    fieldErrors.value = {}
+  }
+
   return {
     user,
     loading,
     error,
     fieldErrors,
     isAuthenticated,
-
+    
+    clearErrors,
     login,
     logout,
     fetchUser,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from './auth.store'
 
@@ -9,6 +9,7 @@ import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
 import Label from 'primevue/label'
 import Message from 'primevue/message'
+import { on } from 'events'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -35,6 +36,10 @@ const goToForgotPassword = () => {
 const goToCreateAccount = () => {
   router.push('/register')
 }
+
+onMounted(() => {
+  authStore.clearErrors()
+})
 </script>
 
 <template>

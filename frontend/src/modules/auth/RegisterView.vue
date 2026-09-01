@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from './auth.store'
@@ -44,6 +44,10 @@ const register = async () => {
 const goToLogin = () => {
   router.push('/login')
 }
+
+onMounted(() => {
+  authStore.clearErrors()
+})
 </script>
 
 <template>
