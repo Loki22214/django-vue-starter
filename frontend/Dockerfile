@@ -18,6 +18,9 @@ CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
 # Build stage for production
 FROM base AS builder
 
+ARG VITE_API_URL=/api
+ENV VITE_API_URL=${VITE_API_URL}
+
 COPY ./package*.json ./
 RUN npm ci --only=production
 
@@ -29,15 +32,15 @@ RUN npm run build
 FROM nginx:alpine AS production
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN adduser -D -g '' -u 1001 appuser && \
-    mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R appuser:appuser /usr/share/nginx/html /var/cache/nginx /var/run /var/log/nginx && \
-    chmod -R 755 /usr/share/nginx/html /var/cache/nginx /var/run /var/log/nginx && \
-    # Modify default nginx to run on port 5173 and remove user directive
-    sed -i 's/listen\s*80;/listen 5173;/g' /etc/nginx/conf.d/default.conf && \
-    sed -i 's/^user.*$//g' /etc/nginx/nginx.conf && \
-    sed -i 's/pid \/run\/nginx.pid/pid \/var\/run\/nginx.pid/g' /etc/nginx/nginx.conf
+RUN adduser -D -H -u 1001 appuser && \
+    mkdir -p /tmp/nginx /var/cache/nginx && \
+    chown -R appuser:appuser \
+        /tmp/nginx \
+        /var/cache/nginx \
+        /usr/share/nginx/html \
+        /etc/nginx
 
 USER appuser
 
