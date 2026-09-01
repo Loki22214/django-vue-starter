@@ -4,7 +4,7 @@ import LoginView from '@/modules/auth/LoginView.vue'
 import RegisterView from '@/modules/auth/RegisterView.vue'
 import DashboardView from '@/modules/dashboard/DashboardView.vue'
 import TaskView from '@/modules/tasks/TasksView.vue'
-import NotFoundView from '@/shared/NotFoundView.vue'
+import NotFoundView from '@/shared/views/NotFoundView.vue'
 import { useAuthStore } from '@/modules/auth/auth.store'
 
 const router = createRouter({

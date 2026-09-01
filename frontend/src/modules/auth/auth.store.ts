@@ -2,28 +2,9 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import axios from 'axios'
 
-import type { ApiErrorResponse } from '@/shared/types'
+import type { ApiErrorResponse } from '@/shared/types/types'
+import type { User, LoginPayload, RegisterPayload } from './auth.types'
 import client from '@/app/client'
-
-interface User {
-  id: number
-  first_name: string
-  last_name: string
-  email: string
-}
-
-interface LoginPayload {
-  email: string
-  password: string
-}
-
-interface RegisterPayload {
-  first_name: string
-  last_name: string
-  email: string
-  password: string
-  password_confirm: string
-}
 
 interface FieldErrors {
   [key: string]: string[]

@@ -1,24 +1,5 @@
 import client from '../../app/client'
-
-export interface LoginPayload {
-  email: string
-  password: string
-}
-
-export interface RegisterPayload {
-  first_name: string
-  last_name: string
-  email: string
-  password: string
-  password_confirm: string
-}
-
-export interface User {
-  id: number
-  first_name: string
-  last_name: string
-  email: string
-}
+import type { LoginPayload, RegisterPayload, User } from './auth.types'
 
 export const login = async (payload: LoginPayload) => {
   const response = await client.post('/auth/login/', payload)

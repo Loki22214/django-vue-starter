@@ -7,7 +7,7 @@ import {
 } from './tasks.api'
 
 import type { Task } from './tasks.types'
-import type { ApiErrorResponse } from '@/shared/types'
+import {parseApiErrors} from '@/shared/utils/parseApiErrors'
 
 export const useTaskForm = (
   onSuccess: () => Promise<void>
@@ -98,25 +98,7 @@ export const useTaskForm = (
     } catch (err: unknown) {
       console.error('Failed to save task:', err)
 
-      const response = (
-        err as {
-          response?: {
-            data?: ApiErrorResponse
-          }
-        }
-      ).response
-
-      if (response?.data?.errors) {
-        const apiErrors = response.data.errors
-
-        for (const key in apiErrors) {
-          const value = apiErrors[key]
-
-          errors.value[key] = Array.isArray(value)
-            ? value.join(', ')
-            : String(value)
-        }
-      }
+      errors.value = parseApiErrors(err)
 
       toast.add({
         severity: 'error',

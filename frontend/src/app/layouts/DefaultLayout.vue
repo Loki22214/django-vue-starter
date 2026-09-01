@@ -30,7 +30,7 @@ import Moon from '@primeicons/vue/moon'
 import Sun from '@primeicons/vue/sun'
 
 import { useAuthStore } from '@/modules/auth/auth.store'
-import { useTheme } from '@/shared/useTheme'
+import { useTheme } from '@/shared/composables/useTheme'
 
 const router = useRouter()
 const authStore = useAuthStore()
