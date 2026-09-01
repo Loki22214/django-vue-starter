@@ -21,7 +21,13 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     filterset_fields = ["status", "priority", "due_date"]
     search_fields = ["name", "description"]
-    ordering_fields = ["__all__"]
+    ordering_fields = [
+        "name",
+        "status",
+        "priority",
+        "due_date",
+        "created_at",
+    ]
 
     def get_queryset(self):
         """
